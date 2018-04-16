@@ -1,23 +1,21 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { TabNavigator } from 'react-navigation';
+import { Button } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import Equipos from './src/Views/EquiposView';
+import Jugadores from './src/Views/JugadoresView';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
-      </View>
-    );
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+var Main = TabNavigator({
+    Tab1 : {screen : Equipos},
+    Tab2 : {screen : Jugadores}
+},{
+  tabBarPosition : 'bottom',
+  swipeEnabled : true
 });
+
+Main.navigationOptions = {
+  title : 'Tabs'
+};
+
+export default Main;
