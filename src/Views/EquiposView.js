@@ -1,17 +1,23 @@
 'use strict'
 import React from 'react';
-import { StyleSheet, Text, View, Alert, Navigator } from 'react-native';
+import { StyleSheet, Text, View, Alert, Navigator, Image } from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
 
 export default class EquiposView extends React.Component {
   static navigationOptions = {
-    tabBarLabel: 'Equipos'
+    tabBarLabel: 'Equipos',
+    tabBarIcon: ({ focused,tintColor }) => (
+      <Image
+        source={require('../Views/Images/Team.png')}
+        style={[styles.icon, { color: tintColor }]}
+      />
+    )
   }
   render() {
     return (
-      <View style={styles.container}>
+      <View>
         <Text>Hola Equipo</Text>
         <Button title='Hola Mundo' onPress={(this.Alerta.bind(this))}/>
       </View>
@@ -25,10 +31,9 @@ export default class EquiposView extends React.Component {
 module.exports = EquiposView;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+  icon: {
+    width: 30,
+    height: 30,
+    color : 'transparent'
   },
 });

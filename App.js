@@ -11,7 +11,28 @@ var Main = TabNavigator({
     Tab2 : {screen : Jugadores}
 },{
   tabBarPosition : 'bottom',
-  swipeEnabled : true
+  swipeEnabled : true,
+  tabBarOptions : {
+    inactiveBackgroundColor : 'transparent',
+    activeBackgroundColor : 'transparent',
+    showIcon : true,
+    showLabel : false,
+    indicatorStyle: {
+      backgroundColor: 'transparent'
+    },
+    style: {
+      //backgroundColor: '#cc9933',
+      backgroundColor: 'white',
+      opacity: 1,
+      padding: 0,
+      margin: 0,
+      borderTopWidth: 3,
+      borderTopColor: 'white'
+    },
+    tabStyle : {
+      backgroundColor: 'white'
+    }
+  }
 });
 
 Main.navigationOptions = {

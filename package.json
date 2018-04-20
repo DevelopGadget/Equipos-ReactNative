@@ -27,6 +27,8 @@
     "react-native-material-ui": "^1.22.2",
     "react-native-tab-navigator": "^0.3.4",
     "react-native-vector-icons": "^4.6.0",
-    "react-navigation": "^1.5.11"
+    "react-navigation": "^1.5.11",
+    "to": "^0.2.9",
+    "update": "^0.7.4"
   }
 }
