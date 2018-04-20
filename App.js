@@ -23,14 +23,11 @@ var Main = TabNavigator({
     style: {
       //backgroundColor: '#cc9933',
       backgroundColor: 'white',
-      opacity: 1,
+      //opacity: 0.7,
       padding: 0,
       margin: 0,
-      borderTopWidth: 3,
+      borderTopWidth: 5,
       borderTopColor: 'white'
-    },
-    tabStyle : {
-      backgroundColor: 'white'
     }
   }
 });

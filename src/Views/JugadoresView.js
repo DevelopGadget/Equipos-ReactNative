@@ -20,6 +20,7 @@ export default class JugadoresView extends React.Component {
       <View style={styles.container}>
         <Text>Hola Jugador</Text>
         <Button title='Hola Mundo holw'/>
+        <Button large icon={{name: 'squirrel', type: 'octicon', buttonStyle: styles.someButtonStyle }} title='OCTICON' />
       </View>
     );
   }

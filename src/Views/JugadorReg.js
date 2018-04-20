@@ -5,32 +5,17 @@ import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
 
-export default class EquiposView extends React.Component {
-  static navigationOptions = {
-    tabBarLabel: 'Equipos',
-    tabBarIcon: ({ focused,tintColor }) => (
-      <Image
-        source={require('../Views/Images/Team.png')}
-        style={[styles.icon, { color: tintColor }]}
-      />
-    ) 
-  }
-  render() {
+export default class JugadorReg extends React.Component {
+render() {
     return (
-      <View>
-        <Text>Hola Equipo</Text>
-        <Button title='Hola Mundo' onPress={(this.Alerta.bind(this))}/>
+      <View style={styles.container}>
+        <Text>Hola Jugador</Text>
+        <Button title='Hola Mundo holw'/>
         <Button large icon={{name: 'squirrel', type: 'octicon', buttonStyle: styles.someButtonStyle }} title='OCTICON' />
       </View>
     );
   }
-  Alerta(){
-  Alert.alert('Prueba','Prueba', [])
 }
-}
-
-module.exports = EquiposView;
-
 const styles = StyleSheet.create({
   icon: {
     width: 30,
