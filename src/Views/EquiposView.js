@@ -5,9 +5,19 @@ import { Button, Card } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
 
-var Equipos = require('..//Controllers/EquipoController');
+var EquiposCont = require('..//Controllers/EquipoController');
 
 export default class EquiposView extends React.Component {
+  constructor(props){
+    super(props);
+    this.state ={ isLoading: false, Equipos: []}
+  }
+  componentDidMount(){
+    this.setState({
+      isLoading: true,
+      Equipos: await EquiposCont.Get(),
+    }, function(){});
+  }
   static navigationOptions = {
     tabBarLabel: 'Equipos',
     tabBarIcon: ({ focused,tintColor }) => (
@@ -17,18 +27,15 @@ export default class EquiposView extends React.Component {
       />
     ) 
   }
-
   render() {
-    var Equipo = Equipos.Get();
-    console.log(Equipo);
     return (
       <ScrollView style={styles.ScrollContainer}>
         <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
         <View>
-          <Card title='Equipos' image={{ uri: Equipo[0].uEscudo }}>
-            <Text style={{marginBottom: 10}}>Id : {Equipo[0].Id}</Text>
-            <Text style={{marginBottom: 10}}>Nombre : {Equipo[0].sNombre}</Text>
-            <Text style={{marginBottom: 10}}>Estadio : {Equipo[0].sEstadio}</Text>
+          <Card title='Equipos' image={{ uri: this.state.Equipos[0].uEscudo }}>
+            <Text style={{marginBottom: 10}}>Id : {this.state.Equipos[0].Id}</Text>
+            <Text style={{marginBottom: 10}}>Nombre : {this.state.Equipos[0].sNombre}</Text>
+            <Text style={{marginBottom: 10}}>Estadio : {this.state.Equipos[0].sEstadio}</Text>
             <Button large icon={{ name: 'eye', type: 'font-awesome'}}
               backgroundColor='#03A9F4'
               buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
@@ -39,7 +46,6 @@ export default class EquiposView extends React.Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   Icon: {
     width: 30,
