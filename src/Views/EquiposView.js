@@ -5,7 +5,7 @@ import { Button, Card } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
 
-var EquiposCont = require('..//Controllers/EquipoController');
+import EquiposCont from '../Controllers/EquipoController';
 
 export default class EquiposView extends React.Component {
   constructor(props){
@@ -13,10 +13,12 @@ export default class EquiposView extends React.Component {
     this.state ={ isLoading: false, Equipos: []}
   }
   componentDidMount(){
-    this.setState({
-      isLoading: true,
-      Equipos: await EquiposCont.Get(),
-    }, function(){});
+    EquiposCont.Get().then((res) =>{
+      this.setState({
+        isLoading: true,
+        Equipos: res
+      }, function(){});
+    });
   }
   static navigationOptions = {
     tabBarLabel: 'Equipos',
@@ -28,8 +30,9 @@ export default class EquiposView extends React.Component {
     ) 
   }
   render() {
-    return (
-      <ScrollView style={styles.ScrollContainer}>
+    if(this.state.isLoading){
+      return(
+        <ScrollView style={styles.ScrollContainer}>
         <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
         <View>
           <Card title='Equipos' image={{ uri: this.state.Equipos[0].uEscudo }}>
@@ -43,7 +46,12 @@ export default class EquiposView extends React.Component {
           </Card>
         </View>
       </ScrollView>
-    );
+      );
+    }else{
+      return (
+        <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
+      );
+    }
   }
 }
 const styles = StyleSheet.create({
