@@ -1,6 +1,6 @@
 'use strict'
 import React from 'react';
-import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { Button, Card } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
@@ -35,7 +35,7 @@ export default class EquiposView extends React.Component {
         <ScrollView style={styles.ScrollContainer}>
         <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
         <View>
-          {this.state.Equipos.map((Equipo) =>{
+          {this.state.Equipos.map((Equipo, i) =>{
             return(            
               <Card title='Equipos' image={{ uri: Equipo.uEscudo }}>
                 <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
@@ -52,7 +52,9 @@ export default class EquiposView extends React.Component {
       );
     }else{
       return (
-        <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
+        <View style={{flex: 1, justifyContent: 'center'}}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
       );
     }
   }
