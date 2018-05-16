@@ -53,7 +53,7 @@ export default class EquiposView extends React.Component {
     }else{
       return (
         <View style={{flex: 1, justifyContent: 'center'}}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size='large' color='#0000ff' style={{height: 120}}/>
         </View>
       );
     }
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     flex : 1,
   },
   Boton: {
-    marginTop: 20,
+    marginTop: 30,
     backgroundColor: '#6200ea',
     height: 60,
     justifyContent: 'center',
