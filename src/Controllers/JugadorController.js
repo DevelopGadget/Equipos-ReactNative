@@ -8,7 +8,7 @@ var Peticiones = {
       return responseJson;
     })
     .catch((error) => {
-      console.error(error);
+      return null;
     });
   }
 }
