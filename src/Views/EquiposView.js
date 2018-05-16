@@ -35,15 +35,18 @@ export default class EquiposView extends React.Component {
         <ScrollView style={styles.ScrollContainer}>
         <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
         <View>
-          <Card title='Equipos' image={{ uri: this.state.Equipos[0].uEscudo }}>
-            <Text style={{marginBottom: 10}}>Id : {this.state.Equipos[0].Id}</Text>
-            <Text style={{marginBottom: 10}}>Nombre : {this.state.Equipos[0].sNombre}</Text>
-            <Text style={{marginBottom: 10}}>Estadio : {this.state.Equipos[0].sEstadio}</Text>
-            <Button large icon={{ name: 'eye', type: 'font-awesome'}}
-              backgroundColor='#03A9F4'
-              buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-              title='Ver Equipo' />
-          </Card>
+          {this.state.Equipos.map((Equipo) =>{
+            return(            
+              <Card title='Equipos' image={{ uri: Equipo.uEscudo }}>
+                <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
+                <Text style={{marginBottom: 10}}>Nombre : {Equipo.sNombre}</Text>
+                <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>
+                <Button large icon={{ name: 'eye', type: 'font-awesome'}}
+                  backgroundColor='#03A9F4'
+                  buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                title='Ver Equipo' />
+              </Card>);
+          })}
         </View>
       </ScrollView>
       );
