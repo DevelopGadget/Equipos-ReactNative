@@ -50,7 +50,7 @@ export default class JugadoresView extends React.Component {
         <View>
           {this.state.Jugadores.map((Jugador, i) =>{
             return(            
-              <Card title='Equipos' image={{ uri: Jugador.uJugador }}>
+              <Card title='Equipos' image={{ uri: Jugador.uJugador }} key={Jugador.Id}>
                 <Text style={{marginBottom: 10}}>Id : {Jugador.Id}</Text>
                 <Text style={{marginBottom: 10}}>Nombre : {Jugador.sNombre}</Text>
                 <Text style={{marginBottom: 10}}>Edad : {Jugador.iEdad}</Text>
@@ -59,7 +59,15 @@ export default class JugadoresView extends React.Component {
                 <Button large icon={{ name: 'eye', type: 'font-awesome'}}
                   backgroundColor='#03A9F4'
                   buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                title='Ver Equipo' />
+                  onPress={() => Alert.alert(
+                    'Alert Title',
+                    Jugador.Id,
+                    [
+                      {text: 'OK'}
+                    ],
+                    { cancelable: false }
+                  )}
+                title='Ver Jugador' />
               </Card>);
           })}
         </View>

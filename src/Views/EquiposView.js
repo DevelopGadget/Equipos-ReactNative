@@ -1,6 +1,6 @@
 'use strict'
 import React from 'react';
-import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions, ActivityIndicator, YellowBox } from 'react-native';
 import { Button, Card, SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
@@ -10,13 +10,19 @@ import EquiposCont from '../Controllers/EquipoController';
 export default class EquiposView extends React.Component {
   constructor(props){
     super(props);
-    this.state ={ isLoading: false, Equipos: []}
+    YellowBox.ignoreWarnings([
+      'Warning: componentWillMount is deprecated',
+      'Warning: componentWillReceiveProps is deprecated',
+    ]);
+    this.state ={ isLoading: false, Equipos: [], Filter: {}, isFilter: false}
   }
   componentDidMount(){
     EquiposCont.Get().then((res) =>{
       this.setState({
         isLoading: true,
-        Equipos: res
+        Equipos: res,
+        Filter: {},
+        isFilter: false
       }, function(){});
     });
   }
@@ -30,6 +36,11 @@ export default class EquiposView extends React.Component {
     ) 
   }
   render() {
+    if(this.state.isFilter){
+
+    }else{
+
+    }
     if(this.state.isLoading){
       return(
         <ScrollView style={styles.ScrollContainer}>
@@ -50,12 +61,20 @@ export default class EquiposView extends React.Component {
           <View>
             {this.state.Equipos.map((Equipo, i) =>{
               return(            
-                <Card title='Equipos' image={{ uri: Equipo.uEscudo }}>
+                <Card title='Equipos' image={{ uri: Equipo.uEscudo }} key={Equipo.Id}>
                   <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
                   <Text style={{marginBottom: 10}}>Nombre : {Equipo.sNombre}</Text>
                   <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>
                   <Button large icon={{ name: 'eye', type: 'font-awesome'}}
                     backgroundColor='#03A9F4'
+                    onPress={() => Alert.alert(
+                      'Alert Title',
+                      Equipo.Id,
+                      [
+                        {text: 'OK'}
+                      ],
+                      { cancelable: false }
+                    )}
                     buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
                     title='Ver Equipo' />
                 </Card>);
