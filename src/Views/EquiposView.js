@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
 
 import EquiposCont from '../Controllers/EquipoController';
-
+const hola = 'hopl';
 export default class EquiposView extends React.Component {
   constructor(props){
     super(props);
@@ -21,7 +21,7 @@ export default class EquiposView extends React.Component {
       this.setState({
         isLoading: true,
         Equipos: res,
-        Filter: {},
+        Filter: [],
         isFilter: false
       }, function(){});
     });
@@ -35,12 +35,41 @@ export default class EquiposView extends React.Component {
       />
     ) 
   }
-  render() {
+  Filter(Text){
+    Filter = this.state.Equipos.filter(item => {return item.sNombre.match(Text.toUpperCase())});
+    this.setState({
+      isLoading: true,
+      Equipos: this.state.Equipos,
+      Filter: Filter,
+      isFilter: true
+    }, function(){});
+  }
+  Card(Equipo){
+    return(            
+      <Card title='Equipos' image={{ uri: Equipo.uEscudo }} key={Equipo.Id}>
+        <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
+        <Text style={{marginBottom: 10}}>Nombre : {Equipo.sNombre}</Text>
+        <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>
+        <Button large icon={{ name: 'eye', type: 'font-awesome'}}
+          backgroundColor='#03A9F4'
+          onPress={() => Alert.alert('Alert Title',Equipo.Id,[{text: 'OK'}],{ cancelable: false })}
+          buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+        title='Ver Equipo' />
+      </Card>
+    );
+  }
+  Filtrado(Text){
     if(this.state.isFilter){
-
+      this.state.Equipos.map((Equipo, i) =>{
+        return(Card(Equipo));
+      })
     }else{
-
+      this.state.Filter.map((Equipo, i) =>{
+        return(Card(Equipo));
+      })
     }
+  }
+  render() {
     if(this.state.isLoading){
       return(
         <ScrollView style={styles.ScrollContainer}>
@@ -50,7 +79,7 @@ export default class EquiposView extends React.Component {
                 lightTheme
                 searchIcon={{ size: 24 }}
                 clearIcon={{ color: 'red' }}
-                // onChangeText={someMethod}
+               // onChangeText={(Text) => this.Filter({Text})}
                 // onClear={someMethod}
               placeholder='Buscar' />
             </View>
@@ -59,26 +88,9 @@ export default class EquiposView extends React.Component {
             </View>
           </View>
           <View>
-            {this.state.Equipos.map((Equipo, i) =>{
-              return(            
-                <Card title='Equipos' image={{ uri: Equipo.uEscudo }} key={Equipo.Id}>
-                  <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
-                  <Text style={{marginBottom: 10}}>Nombre : {Equipo.sNombre}</Text>
-                  <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>
-                  <Button large icon={{ name: 'eye', type: 'font-awesome'}}
-                    backgroundColor='#03A9F4'
-                    onPress={() => Alert.alert(
-                      'Alert Title',
-                      Equipo.Id,
-                      [
-                        {text: 'OK'}
-                      ],
-                      { cancelable: false }
-                    )}
-                    buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                    title='Ver Equipo' />
-                </Card>);
-            })}
+            {
+              this.Filtrado(hola)
+            }
           </View>
         </ScrollView>
       );
