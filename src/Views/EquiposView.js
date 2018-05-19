@@ -14,7 +14,7 @@ export default class EquiposView extends React.Component {
       'Warning: componentWillMount is deprecated',
       'Warning: componentWillReceiveProps is deprecated',
     ]);
-    this.state ={ isLoading: false, Equipos: [], Filter: {}, isFilter: false}
+    this.state ={ isLoading: false, Equipos: [], Backup: []}
   }
   componentDidMount(){
     EquiposCont.Get().then((res) =>{
@@ -58,7 +58,7 @@ export default class EquiposView extends React.Component {
               {
                 this.state.Equipos.map((Equipo, i) =>{
                   return(
-                    <Card title='Equipos' image={{ uri: Equipo.uEscudo }} key={Equipo.Id}>
+                    <Card title='Equipo' image={{ uri: Equipo.uEscudo }} key={Equipo.Id}>
                       <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
                       <Text style={{marginBottom: 10}}>Nombre : {Equipo.sNombre}</Text>
                       <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>

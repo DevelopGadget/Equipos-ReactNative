@@ -8,22 +8,27 @@ import { TabNavigator } from 'react-navigation';
 import JugadorCont from '../Controllers/JugadorController';
 
 export default class JugadoresView extends React.Component {
-  constructor(props){
+  constructor(props){ 
     super(props);
-    this.state ={ isLoading: false, Equipos: []}
+    this.state ={ isLoading: false, Jugadores: [], Backup: []}
   }
   componentDidMount(){
     JugadorCont.Get().then((res) =>{
-      this.setState({
-        isLoading: true,
-        Jugadores: res
-      }, function(){});
+      this.ChangeState(true, res, res);
     });
+  }
+  ChangeState(Load, Jugadores, Backup){
+    this.setState({
+      isLoading: Load,
+      Jugadores: Jugadores,
+      Backup: Backup,
+    }, function(){});
+    console.log(Backup);
   }
   static navigationOptions = {
     tabBarLabel: 'Jugdores',
     tabBarIcon: ({ focused,tintColor }) => (
-      <Image
+      <Image 
         source={require('../Views/Images/Player.png')}
         style={[styles.Icon]}
       />
@@ -39,9 +44,8 @@ export default class JugadoresView extends React.Component {
                 lightTheme
                 searchIcon={{ size: 24 }}
                 clearIcon={{ color: 'red' }}
-                // onChangeText={someMethod}
-                // onClear={someMethod}
-              placeholder='Buscar' />
+                onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup)}
+               placeholder='Buscar' />
             </View>
             <View style={{flex: 1, marginTop: 30,}}>
               <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
@@ -50,7 +54,7 @@ export default class JugadoresView extends React.Component {
         <View>
           {this.state.Jugadores.map((Jugador, i) =>{
             return(            
-              <Card title='Equipos' image={{ uri: Jugador.uJugador }} key={Jugador.Id}>
+              <Card title='Jugador  ' image={{ uri: Jugador.uJugador }} key={Jugador.Id}>
                 <Text style={{marginBottom: 10}}>Id : {Jugador.Id}</Text>
                 <Text style={{marginBottom: 10}}>Nombre : {Jugador.sNombre}</Text>
                 <Text style={{marginBottom: 10}}>Edad : {Jugador.iEdad}</Text>
@@ -59,14 +63,7 @@ export default class JugadoresView extends React.Component {
                 <Button large icon={{ name: 'eye', type: 'font-awesome'}}
                   backgroundColor='#03A9F4'
                   buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                  onPress={() => Alert.alert(
-                    'Alert Title',
-                    Jugador.Id,
-                    [
-                      {text: 'OK'}
-                    ],
-                    { cancelable: false }
-                  )}
+                  onPress={() => Alert.alert('Alert Title',Jugador.Id,[{text: 'OK'}],{ cancelable: false })}
                 title='Ver Jugador' />
               </Card>);
           })}
