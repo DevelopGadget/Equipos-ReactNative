@@ -18,12 +18,7 @@ export default class EquiposView extends React.Component {
   }
   componentDidMount(){
     EquiposCont.Get().then((res) =>{
-      this.setState({
-        isLoading: true,
-        Equipos: res,
-        Filter: [],
-        isFilter: false
-      }, function(){});
+      this.ChangeState(true, res, res);
     });
   }
   static navigationOptions = {
@@ -35,65 +30,50 @@ export default class EquiposView extends React.Component {
       />
     ) 
   }
-  Filter(Text){
-    Filter = this.state.Equipos.filter(item => {return item.sNombre.match(Text.toUpperCase())});
+  ChangeState(Load, Equipos, Backup){
     this.setState({
-      isLoading: true,
-      Equipos: this.state.Equipos,
-      Filter: Filter,
-      isFilter: true
+      isLoading: Load,
+      Equipos: Equipos,
+      Backup: Backup,
     }, function(){});
-  }
-  Card(Equipo){
-    return(            
-      <Card title='Equipos' image={{ uri: Equipo.uEscudo }} key={Equipo.Id}>
-        <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
-        <Text style={{marginBottom: 10}}>Nombre : {Equipo.sNombre}</Text>
-        <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>
-        <Button large icon={{ name: 'eye', type: 'font-awesome'}}
-          backgroundColor='#03A9F4'
-          onPress={() => Alert.alert('Alert Title',Equipo.Id,[{text: 'OK'}],{ cancelable: false })}
-          buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-        title='Ver Equipo' />
-      </Card>
-    );
-  }
-  Filtrado(Text){
-    if(this.state.isFilter){
-      this.state.Equipos.map((Equipo, i) =>{
-        return(Card(Equipo));
-      })
-    }else{
-      this.state.Filter.map((Equipo, i) =>{
-        return(Card(Equipo));
-      })
-    }
   }
   render() {
     if(this.state.isLoading){
-      return(
-        <ScrollView style={styles.ScrollContainer}>
-          <View style={styles.Container}>
-            <View style={{marginTop: 30, flex: 1, paddingLeft: 10}}>
-              <SearchBar
-                lightTheme
-                searchIcon={{ size: 24 }}
-                clearIcon={{ color: 'red' }}
-               // onChangeText={(Text) => this.Filter({Text})}
-                // onClear={someMethod}
-              placeholder='Buscar' />
+        return(
+          <ScrollView style={styles.ScrollContainer}>
+            <View style={styles.Container}>
+              <View style={{marginTop: 30, flex: 1, paddingLeft: 10}}>
+                <SearchBar
+                  lightTheme
+                  searchIcon={{ size: 24 }}
+                  clearIcon={{ color: 'red' }}
+                  onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup)}
+                placeholder='Buscar' />
+              </View>
+              <View style={{flex: 1, marginTop: 30,}}>
+                <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
+              </View>
             </View>
-            <View style={{flex: 1, marginTop: 30,}}>
-              <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
+            <View>
+              {
+                this.state.Equipos.map((Equipo, i) =>{
+                  return(
+                    <Card title='Equipos' image={{ uri: Equipo.uEscudo }} key={Equipo.Id}>
+                      <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
+                      <Text style={{marginBottom: 10}}>Nombre : {Equipo.sNombre}</Text>
+                      <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>
+                      <Button large icon={{ name: 'eye', type: 'font-awesome'}}
+                        backgroundColor='#03A9F4'
+                        onPress={() => Alert.alert('Alert Title',Equipo.Id,[{text: 'OK'}],{ cancelable: false })}
+                        buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                      title='Ver Equipo' />
+                    </Card>
+                  );
+                })
+              }
             </View>
-          </View>
-          <View>
-            {
-              this.Filtrado(hola)
-            }
-          </View>
-        </ScrollView>
-      );
+          </ScrollView>
+        ); 
     }else{
       return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', height: 100}}>
