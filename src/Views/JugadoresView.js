@@ -2,6 +2,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import {  Button, Card, SearchBar } from 'react-native-elements';
+import Modal from 'react-native-modalbox'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
 
@@ -37,7 +38,8 @@ export default class JugadoresView extends React.Component {
   render() {
     if(this.state.isLoading){
       return(
-        <ScrollView style={styles.ScrollContainer}>
+        <View style={styles.ScrollContainer}>
+        <ScrollView >
           <View style={styles.Container}>
             <View style={{marginTop: 30, flex: 1, paddingLeft: 10}}>
               <SearchBar
@@ -54,7 +56,7 @@ export default class JugadoresView extends React.Component {
         <View>
           {this.state.Jugadores.map((Jugador, i) =>{
             return(            
-              <Card title='Jugador  ' image={{ uri: Jugador.uJugador }} key={Jugador.Id}>
+              <Card title='Jugador' image={{ uri: Jugador.uJugador }} key={Jugador.Id}>
                 <Text style={{marginBottom: 10}}>Id : {Jugador.Id}</Text>
                 <Text style={{marginBottom: 10}}>Nombre : {Jugador.sNombre}</Text>
                 <Text style={{marginBottom: 10}}>Edad : {Jugador.iEdad}</Text>
@@ -63,12 +65,16 @@ export default class JugadoresView extends React.Component {
                 <Button large icon={{ name: 'eye', type: 'font-awesome'}}
                   backgroundColor='#03A9F4'
                   buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                  onPress={() => Alert.alert('Alert Title',Jugador.Id,[{text: 'OK'}],{ cancelable: false })}
+                  onPress={() => this.refs.Modal.open()}
                 title='Ver Jugador' />
               </Card>);
           })}
         </View>
       </ScrollView>
+        <Modal style={[styles.Modal]} position={"center"} ref={"Modal"} isDisabled={false}>
+            <Text>Hola soy un modal</Text>
+        </Modal>
+      </View>  
       );
     }else{
       return (
@@ -98,7 +104,14 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  }, 
+  },
+  Modal: {
+    justifyContent: 'center',
+    borderRadius: 20,
+    shadowRadius: 20,
+    width: Dimensions.get('window').width - 80,
+    height: 400
+  } 
 });
 
 module.exports = JugadoresView;
