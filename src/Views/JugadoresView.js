@@ -1,7 +1,7 @@
 'use strict'
 import React from 'react';
 import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
-import {  Button, Card, SearchBar } from 'react-native-elements';
+import {  Button, Card, SearchBar, Header } from 'react-native-elements';
 import Modal from 'react-native-modalbox'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
@@ -39,7 +39,7 @@ export default class JugadoresView extends React.Component {
     if(this.state.isLoading){
       return(
         <View style={styles.ScrollContainer}>
-        <ScrollView >
+        <ScrollView>
           <View style={styles.Container}>
             <View style={{marginTop: 30, flex: 1, paddingLeft: 10}}>
               <SearchBar
@@ -50,7 +50,7 @@ export default class JugadoresView extends React.Component {
                placeholder='Buscar' />
             </View>
             <View style={{flex: 1, marginTop: 30,}}>
-              <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
+              <Button raised icon={{ name: 'plus-circle', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={styles.Boton}/>
             </View>
           </View>
         <View>
@@ -62,7 +62,7 @@ export default class JugadoresView extends React.Component {
                 <Text style={{marginBottom: 10}}>Edad : {Jugador.iEdad}</Text>
                 <Text style={{marginBottom: 10}}>Nacionalidad : {Jugador.sNacionalidad}</Text>
                 <Text style={{marginBottom: 10}}>Equipo : {Jugador.sEquipo.sNombre}</Text>
-                <Button large icon={{ name: 'eye', type: 'font-awesome'}}
+                <Button large icon={{ name: 'eye', type: 'font-awesome', size: 30}}
                   backgroundColor='#03A9F4'
                   buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
                   onPress={() => this.refs.Modal.open()}
@@ -71,8 +71,13 @@ export default class JugadoresView extends React.Component {
           })}
         </View>
       </ScrollView>
-        <Modal style={[styles.Modal]} position={"center"} ref={"Modal"} isDisabled={false}>
-            <Text>Hola soy un modal</Text>
+        <Modal style={[styles.Modal]} position={"center"} ref={"Modal"} isDisabled={false} backdropPressToClose={false} swipeToClose={false}>
+            <View style={styles.HeaderModal}>
+              <View style={styles.Container}>
+                <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 3}}>Nombre Del Jugador</Text>
+                <Button large icon={{ name: 'times', type: 'font-awesome', size:30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
+              </View>
+            </View>
         </Modal>
       </View>  
       );
@@ -106,12 +111,20 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   Modal: {
-    justifyContent: 'center',
+    alignItems: 'flex-start',
     borderRadius: 20,
     shadowRadius: 20,
     width: Dimensions.get('window').width - 80,
     height: 400
-  } 
+  },
+  HeaderModal: {
+    flex: .1,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowRadius: 20,
+    width: Dimensions.get('window').width - 80,
+    backgroundColor: '#039be5'
+  },
 });
 
 module.exports = JugadoresView;
