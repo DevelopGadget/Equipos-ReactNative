@@ -1,7 +1,7 @@
 'use strict'
 import React from 'react';
 import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
-import {  Button, Card, SearchBar, Header } from 'react-native-elements';
+import {  Button, Card, SearchBar, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import Modal from 'react-native-modalbox'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { TabNavigator } from 'react-navigation';
@@ -44,13 +44,13 @@ export default class JugadoresView extends React.Component {
             <View style={{marginTop: 30, flex: 1, paddingLeft: 10}}>
               <SearchBar
                 lightTheme
-                searchIcon={{ size: 24 }}
+                searchIcon={{ size: 30 }}
                 clearIcon={{ color: 'red' }}
                 onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup)}
                placeholder='Buscar' />
             </View>
             <View style={{flex: 1, marginTop: 30,}}>
-              <Button raised icon={{ name: 'plus-circle', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={styles.Boton}/>
+              <Button large icon={{ name: 'plus-circle', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={styles.Boton}/>
             </View>
           </View>
         <View>
@@ -74,8 +74,13 @@ export default class JugadoresView extends React.Component {
         <Modal style={[styles.Modal]} position={"center"} ref={"Modal"} isDisabled={false} backdropPressToClose={false} swipeToClose={false}>
             <View style={styles.HeaderModal}>
               <View style={styles.Container}>
-                <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 3}}>Nombre Del Jugador</Text>
-                <Button large icon={{ name: 'times', type: 'font-awesome', size:30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
+                <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 4}}>Nombre Del Jugador</Text>
+                <Button large iconRight={{ name: 'times', type: 'font-awesome', size: 30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
+              </View>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <FormLabel>Nombre Jugador:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
         </Modal>

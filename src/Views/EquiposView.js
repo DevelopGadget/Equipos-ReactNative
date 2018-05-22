@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions, ActivityIndicator, YellowBox } from 'react-native';
 import { Button, Card, SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import Modal from 'react-native-modalbox'
 import { TabNavigator } from 'react-navigation';
 
 import EquiposCont from '../Controllers/EquipoController';
@@ -40,39 +41,49 @@ export default class EquiposView extends React.Component {
   render() {
     if(this.state.isLoading){
         return(
-          <ScrollView style={styles.ScrollContainer}>
-            <View style={styles.Container}>
-              <View style={{marginTop: 30, flex: 1, paddingLeft: 10}}>
-                <SearchBar
-                  lightTheme
-                  searchIcon={{ size: 24 }}
-                  clearIcon={{ color: 'red' }}
-                  onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup)}
-                placeholder='Buscar' />
+          <View style={styles.ScrollContainer}>
+            <ScrollView>
+              <View style={styles.Container}>
+                <View style={{marginTop: 30, flex: 1, paddingLeft: 10}}>
+                  <SearchBar
+                    lightTheme
+                    searchIcon={{ size: 30 }}
+                    clearIcon={{ color: 'red' }}
+                    onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup)}
+                  placeholder='Buscar' />
+                </View>
+                <View style={{flex: 1, marginTop: 30,}}>
+                  <Button large icon={{ name: 'plus-circle', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={styles.Boton}/>
+                </View>
               </View>
-              <View style={{flex: 1, marginTop: 30,}}>
-                <Button raised icon={{ name: 'plus-circle', type: 'font-awesome'}} title='Añadir' buttonStyle={styles.Boton}/>
+              <View>
+                {
+                  this.state.Equipos.map((Equipo, i) =>{
+                    return(
+                      <Card title='Equipo' image={{ uri: Equipo.uEscudo }} key={Equipo.Id}>
+                        <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
+                        <Text style={{marginBottom: 10}}>Nombre : {Equipo.sNombre}</Text>
+                        <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>
+                        <Button large icon={{ name: 'eye', type: 'font-awesome', size: 30}}
+                          backgroundColor='#03A9F4'
+                          onPress={() => this.refs.Modal.open()}
+                          buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
+                        title='Ver Equipo' />
+                      </Card>
+                    );
+                  })
+                }
               </View>
-            </View>
-            <View>
-              {
-                this.state.Equipos.map((Equipo, i) =>{
-                  return(
-                    <Card title='Equipo' image={{ uri: Equipo.uEscudo }} key={Equipo.Id}>
-                      <Text style={{marginBottom: 10}}>Id : {Equipo.Id}</Text>
-                      <Text style={{marginBottom: 10}}>Nombre : {Equipo.sNombre}</Text>
-                      <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>
-                      <Button large icon={{ name: 'eye', type: 'font-awesome'}}
-                        backgroundColor='#03A9F4'
-                        onPress={() => Alert.alert('Alert Title',Equipo.Id,[{text: 'OK'}],{ cancelable: false })}
-                        buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                      title='Ver Equipo' />
-                    </Card>
-                  );
-                })
-              }
-            </View>
-          </ScrollView>
+            </ScrollView>
+            <Modal style={[styles.Modal]} position={"center"} ref={"Modal"} isDisabled={false} backdropPressToClose={false} swipeToClose={false}>
+              <View style={styles.HeaderModal}>
+                <View style={styles.Container}>
+                  <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 4}}>Nombre Del Equipo</Text>
+                  <Button large iconRight={{ name: 'times', type: 'font-awesome', size: 30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
+                </View>
+              </View>
+            </Modal>
+          </View>
         ); 
     }else{
       return (
@@ -101,6 +112,21 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  Modal: {
+    alignItems: 'flex-start',
+    borderRadius: 20,
+    shadowRadius: 20,
+    width: Dimensions.get('window').width - 80,
+    height: 400
+  },
+  HeaderModal: {
+    flex: .1,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    shadowRadius: 20,
+    width: Dimensions.get('window').width - 80,
+    backgroundColor: '#039be5'
   }, 
 });
 
