@@ -77,8 +77,27 @@ export default class JugadoresView extends React.Component {
                 <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 4}}>Nombre Del Jugador</Text>
                 <Button large iconRight={{ name: 'times', type: 'font-awesome', size: 30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
               </View>
-              <View style={{flex: 1, flexDirection: 'row'}}>
+            </View>
+            <View style={{flex: .3, flexDirection: 'row'}}>
+              <View style={{flex: 1}}>
                 <FormLabel>Nombre Jugador:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+              </View>
+              <View style={{flex: 1}}>
+                <FormLabel>Edad Jugador:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+              </View>
+            </View>
+            <View style={{flex: .3,flexDirection: 'row'}}>
+              <View style={{flex: 1}}>
+                <FormLabel>Posición:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+              </View>
+              <View style={{flex: 1}}>
+                <FormLabel>Nacionalidad:</FormLabel>
                 <FormInput/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
@@ -119,7 +138,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     borderRadius: 20,
     shadowRadius: 20,
-    width: Dimensions.get('window').width - 80,
+    width: Dimensions.get('window').width - 60,
     height: 400
   },
   HeaderModal: {
@@ -127,7 +146,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     shadowRadius: 20,
-    width: Dimensions.get('window').width - 80,
+    width: Dimensions.get('window').width - 60,
     backgroundColor: '#039be5'
   },
 });
