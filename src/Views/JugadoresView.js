@@ -4,27 +4,37 @@ import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions
 import {  Button, Card, SearchBar, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import Modal from 'react-native-modalbox'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import ModalDropdown from 'react-native-modal-dropdown';
 import { TabNavigator } from 'react-navigation';
-
 import JugadorCont from '../Controllers/JugadorController';
 
 export default class JugadoresView extends React.Component {
   constructor(props){ 
     super(props);
-    this.state ={ isLoading: false, Jugadores: [], Backup: []}
+    this.state ={ isLoading: false, Jugadores: [], Backup: [], Añadir: false, Seleccion: {}}
   }
   componentDidMount(){
     JugadorCont.Get().then((res) =>{
-      this.ChangeState(true, res, res);
+      this.ChangeState(true, res, res, false, {});
     });
   }
-  ChangeState(Load, Jugadores, Backup){
+  ChangeState(Load, Jugadores, Backup, Añadir, Seleccion){
     this.setState({
       isLoading: Load,
       Jugadores: Jugadores,
       Backup: Backup,
+      Añadir: Añadir,
+      Seleccion: Seleccion
     }, function(){});
     console.log(Backup);
+  }
+  Añadir(){
+    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {});
+    this.refs.Modal.open();
+  }
+  ButtonCard(Jugador){
+    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Jugador);
+    this.refs.Modal.open();
   }
   static navigationOptions = {
     tabBarLabel: 'Jugdores',
@@ -36,6 +46,22 @@ export default class JugadoresView extends React.Component {
     )
   }
   render() {
+    const button = this.state.Añadir ? (
+      <View style={{flex: .2, flexDirection: 'row'}}>
+      <View style={{flex: 1}}>
+        <Button large icon={{ name: 'location-arrow', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={[styles.Boton, {backgroundColor: '#00e676'}]}/>
+      </View>
+    </View>
+    ) : (
+      <View style={{flex: .2, flexDirection: 'row'}}>
+        <View style={{flex: 1}}>
+          <Button large icon={{ name: 'wrench', type: 'font-awesome', size: 30}} title='Modificar' buttonStyle={[styles.Boton, {backgroundColor: '#448aff'}]}/>
+        </View>
+        <View style={{flex: 1}}>
+          <Button large icon={{ name: 'trash', type: 'font-awesome', size: 30}} title='Eliminar' buttonStyle={[styles.Boton, {backgroundColor: '#ff1744'}]}/>
+        </View>
+      </View>
+    );
     if(this.state.isLoading){
       return(
         <View style={styles.ScrollContainer}>
@@ -46,11 +72,11 @@ export default class JugadoresView extends React.Component {
                 lightTheme
                 searchIcon={{ size: 30 }}
                 clearIcon={{ color: 'red' }}
-                onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup)}
+                onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {})}
                placeholder='Buscar' />
             </View>
             <View style={{flex: 1, marginTop: 30,}}>
-              <Button large icon={{ name: 'plus-circle', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={styles.Boton}/>
+              <Button large icon={{ name: 'plus-circle', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={styles.Boton}  onPress={() => this.Añadir()}/>
             </View>
           </View>
         <View>
@@ -65,7 +91,7 @@ export default class JugadoresView extends React.Component {
                 <Button large icon={{ name: 'eye', type: 'font-awesome', size: 30}}
                   backgroundColor='#03A9F4'
                   buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
-                  onPress={() => this.refs.Modal.open()}
+                  onPress={() => this.ButtonCard(Jugador)}
                 title='Ver Jugador' />
               </Card>);
           })}
@@ -78,7 +104,7 @@ export default class JugadoresView extends React.Component {
                 <Button large iconRight={{ name: 'times', type: 'font-awesome', size: 30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
               </View>
             </View>
-            <View style={{flex: .3, flexDirection: 'row'}}>
+            <View style={{flex: .2, flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Jugador:</FormLabel>
                 <FormInput/>
@@ -90,7 +116,7 @@ export default class JugadoresView extends React.Component {
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
-            <View style={{flex: .3,flexDirection: 'row'}}>
+            <View style={{flex: .2,flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Posición:</FormLabel>
                 <FormInput/>
@@ -102,9 +128,28 @@ export default class JugadoresView extends React.Component {
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
+            <View style={{flex: .2,flexDirection: 'row'}}>
+              <View style={{flex: 1}}>
+                <FormLabel>Url Selección:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+              </View>
+              <View style={{flex: 1}}>
+                <FormLabel>Url Persona:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+              </View>
+            </View>
+            <View style={{flex: .2, flexDirection: 'row', marginTop: 20}}>
+              <View style={{flex: 1}}>
+                <FormLabel>Seleccione Equipo:</FormLabel>
+                <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox} dropdownTextStyle={styles.Text} options={['opción 1','opción 2','opción 3']} defaultValue={'opción 1'}/>
+              </View>
+            </View>
+            {button}
         </Modal>
       </View>  
-      );
+    );
     }else{
       return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', height: 100}}>
@@ -139,7 +184,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     shadowRadius: 20,
     width: Dimensions.get('window').width - 60,
-    height: 400
+    height: 440
   },
   HeaderModal: {
     flex: .1,
@@ -149,6 +194,23 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width - 60,
     backgroundColor: '#039be5'
   },
+  ComboBox: {
+    borderWidth: 1, 
+    borderColor: '#b3e5fc', 
+    borderRadius: 20, 
+    backgroundColor: '#b3e5fc', 
+    marginLeft: 20, 
+    marginRight: 20,
+    height: 30 
+  },
+  Text: {
+    marginVertical: 10,
+    marginHorizontal: 6,
+    fontSize: 18,
+    color: 'white',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+  }
 });
 
 module.exports = JugadoresView;

@@ -7,7 +7,6 @@ import Modal from 'react-native-modalbox'
 import { TabNavigator } from 'react-navigation';
 
 import EquiposCont from '../Controllers/EquipoController';
-const hola = 'hopl';
 export default class EquiposView extends React.Component {
   constructor(props){
     super(props);
