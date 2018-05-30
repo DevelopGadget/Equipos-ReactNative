@@ -90,6 +90,31 @@ export default class EquiposView extends React.Component {
                   <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 4}}>Nombre Del Equipo</Text>
                   <Button large iconRight={{ name: 'times', type: 'font-awesome', size: 30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
                 </View>
+                <View style={{flex: .2, flexDirection: 'row'}}>
+              <View style={{flex: 1}}>
+                <FormLabel>Nombre Equip:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+              </View>
+              <View style={{flex: 1}}>
+                <FormLabel>Nombre Estadio:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+              </View>
+            </View>
+            <View style={{flex: .2,flexDirection: 'row'}}>
+              <View style={{flex: 1}}>
+                <FormLabel>Url Estadio:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+              </View>
+              <View style={{flex: 1}}>
+                <FormLabel>Url Escudo:</FormLabel>
+                <FormInput/>
+                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+              </View>
+            </View>
+            {button}
               </View>
             </Modal>
           </View>
