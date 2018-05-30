@@ -1,7 +1,7 @@
 'use strict'
 import React from 'react';
 import { StyleSheet, Text, View, Alert, Navigator, Image, ScrollView, Dimensions, ActivityIndicator, YellowBox } from 'react-native';
-import { Button, Card, SearchBar } from 'react-native-elements';
+import { Button, Card, SearchBar, FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modalbox'
 import { TabNavigator } from 'react-navigation';
@@ -48,6 +48,22 @@ export default class EquiposView extends React.Component {
     this.refs.Modal.open();
   }
   render() {
+    const button = this.state.Añadir ? (
+      <View style={{flex: .2, flexDirection: 'row', marginTop: 40}}>
+      <View style={{flex: 1}}>
+        <Button large icon={{ name: 'location-arrow', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={[styles.Boton, {backgroundColor: '#00e676'}]}/>
+      </View>
+    </View>
+    ) : (
+      <View style={{flex: .2, flexDirection: 'row', marginTop: 40}}>
+        <View style={{flex: 1}}>
+          <Button large icon={{ name: 'wrench', type: 'font-awesome', size: 30}} title='Modificar' buttonStyle={[styles.Boton, {backgroundColor: '#448aff'}]}/>
+        </View>
+        <View style={{flex: 1}}>
+          <Button large icon={{ name: 'trash', type: 'font-awesome', size: 30}} title='Eliminar' buttonStyle={[styles.Boton, {backgroundColor: '#ff1744'}]}/>
+        </View>
+      </View>
+    );
     if(this.state.isLoading){
         return(
           <View style={styles.ScrollContainer}>
@@ -90,7 +106,8 @@ export default class EquiposView extends React.Component {
                   <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 4}}>Nombre Del Equipo</Text>
                   <Button large iconRight={{ name: 'times', type: 'font-awesome', size: 30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
                 </View>
-                <View style={{flex: .2, flexDirection: 'row'}}>
+              </View>
+              <View style={{flex: .2, flexDirection: 'row', marginBottom: 40}}>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Equip:</FormLabel>
                 <FormInput/>
@@ -102,7 +119,7 @@ export default class EquiposView extends React.Component {
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
-            <View style={{flex: .2,flexDirection: 'row'}}>
+            <View style={{flex: .2,flexDirection: 'row', marginBottom: 40}}>
               <View style={{flex: 1}}>
                 <FormLabel>Url Estadio:</FormLabel>
                 <FormInput/>
@@ -115,7 +132,6 @@ export default class EquiposView extends React.Component {
               </View>
             </View>
             {button}
-              </View>
             </Modal>
           </View>
         ); 
@@ -152,7 +168,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     shadowRadius: 20,
     width: Dimensions.get('window').width - 80,
-    height: 400
+    height: 430
   },
   HeaderModal: {
     flex: .1,

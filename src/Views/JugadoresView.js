@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     shadowRadius: 20,
     width: Dimensions.get('window').width - 60,
-    height: 440
+    height: 380
   },
   HeaderModal: {
     flex: .1,
