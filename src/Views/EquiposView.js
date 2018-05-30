@@ -5,8 +5,8 @@ import { Button, Card, SearchBar } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Modal from 'react-native-modalbox'
 import { TabNavigator } from 'react-navigation';
-
 import EquiposCont from '../Controllers/EquipoController';
+
 export default class EquiposView extends React.Component {
   constructor(props){
     super(props);
@@ -14,11 +14,11 @@ export default class EquiposView extends React.Component {
       'Warning: componentWillMount is deprecated',
       'Warning: componentWillReceiveProps is deprecated',
     ]);
-    this.state ={ isLoading: false, Equipos: [], Backup: []}
+    this.state ={ isLoading: false, Equipos: [], Backup: [], Añadir: false, Seleccion: {}}
   }
   componentDidMount(){
     EquiposCont.Get().then((res) =>{
-      this.ChangeState(true, res, res);
+      this.ChangeState(true, res, res, false, {});
     });
   }
   static navigationOptions = {
@@ -30,12 +30,22 @@ export default class EquiposView extends React.Component {
       />
     ) 
   }
-  ChangeState(Load, Equipos, Backup){
+  ChangeState(Load, Equipos, Backup, Añadir, Seleccion){
     this.setState({
       isLoading: Load,
       Equipos: Equipos,
       Backup: Backup,
+      Añadir: Añadir,
+      Seleccion: Seleccion
     }, function(){});
+  }
+  Añadir(){
+    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {});
+    this.refs.Modal.open();
+  }
+  ButtonCard(Equipo){
+    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Equipo);
+    this.refs.Modal.open();
   }
   render() {
     if(this.state.isLoading){
@@ -48,11 +58,11 @@ export default class EquiposView extends React.Component {
                     lightTheme
                     searchIcon={{ size: 30 }}
                     clearIcon={{ color: 'red' }}
-                    onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup)}
+                    onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {})}
                   placeholder='Buscar' />
                 </View>
                 <View style={{flex: 1, marginTop: 30,}}>
-                  <Button large icon={{ name: 'plus-circle', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={styles.Boton}/>
+                  <Button large icon={{ name: 'plus-circle', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={styles.Boton} onPress={() => this.Añadir()}/>
                 </View>
               </View>
               <View>
@@ -65,7 +75,7 @@ export default class EquiposView extends React.Component {
                         <Text style={{marginBottom: 10}}>Estadio : {Equipo.sEstadio}</Text>
                         <Button large icon={{ name: 'eye', type: 'font-awesome', size: 30}}
                           backgroundColor='#03A9F4'
-                          onPress={() => this.refs.Modal.open()}
+                          onPress={() => this.ButtonCard(Equipo)}
                           buttonStyle={{borderRadius: 20, marginLeft: 0, marginRight: 0, marginBottom: 0}}
                         title='Ver Equipo' />
                       </Card>

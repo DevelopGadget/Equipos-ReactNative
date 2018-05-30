@@ -143,7 +143,7 @@ export default class JugadoresView extends React.Component {
             <View style={{flex: .2, flexDirection: 'row', marginTop: 20}}>
               <View style={{flex: 1}}>
                 <FormLabel>Seleccione Equipo:</FormLabel>
-                <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox} options={['opción 1','opción 2','opción 3']} defaultValue={'opción 1'}/>
+                <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox}  options={['opción 1','opción 2','opción 3']} defaultValue={'opción 1'}/>
               </View>
             </View>
             {button}
