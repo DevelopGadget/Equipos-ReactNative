@@ -26,7 +26,6 @@ export default class JugadoresView extends React.Component {
       Añadir: Añadir,
       Seleccion: Seleccion
     }, function(){});
-    console.log(Backup);
   }
   Añadir(){
     this.ChangeState(true, this.state.Backup, this.state.Backup, true, {});
@@ -180,11 +179,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   Modal: {
-    alignItems: 'flex-start',
     borderRadius: 20,
     shadowRadius: 20,
     width: Dimensions.get('window').width - 60,
-    height: 380
+    height: 430
   },
   HeaderModal: {
     flex: .1,

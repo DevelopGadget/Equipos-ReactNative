@@ -14,11 +14,11 @@ export default class EquiposView extends React.Component {
       'Warning: componentWillMount is deprecated',
       'Warning: componentWillReceiveProps is deprecated',
     ]);
-    this.state ={ isLoading: false, Equipos: [], Backup: [], Añadir: false, Seleccion: {}}
+    this.state ={ isLoading: false, Equipos: [], Backup: [], Añadir: false, Seleccion: {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}}
   }
   componentDidMount(){
     EquiposCont.Get().then((res) =>{
-      this.ChangeState(true, res, res, false, {});
+      this.ChangeState(true, res, res, false, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''});
     });
   }
   static navigationOptions = {
@@ -40,7 +40,7 @@ export default class EquiposView extends React.Component {
     }, function(){});
   }
   Añadir(){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {});
+    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''});
     this.refs.Modal.open();
   }
   ButtonCard(Equipo){
@@ -48,6 +48,7 @@ export default class EquiposView extends React.Component {
     this.refs.Modal.open();
   }
   render() {
+    const Titulo = this.state.Añadir ? ('') : (this.state.Seleccion.sNombre);
     const button = this.state.Añadir ? (
       <View style={{flex: .2, flexDirection: 'row', marginTop: 40}}>
       <View style={{flex: 1}}>
@@ -74,7 +75,7 @@ export default class EquiposView extends React.Component {
                     lightTheme
                     searchIcon={{ size: 30 }}
                     clearIcon={{ color: 'red' }}
-                    onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {})}
+                    onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''})}
                   placeholder='Buscar' />
                 </View>
                 <View style={{flex: 1, marginTop: 30,}}>
@@ -103,31 +104,31 @@ export default class EquiposView extends React.Component {
             <Modal style={[styles.Modal]} position={"center"} ref={"Modal"} isDisabled={false} backdropPressToClose={false} swipeToClose={false}>
               <View style={styles.HeaderModal}>
                 <View style={styles.Container}>
-                  <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 4}}>Nombre Del Equipo</Text>
+                  <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 4}}>{Titulo}</Text>
                   <Button large iconRight={{ name: 'times', type: 'font-awesome', size: 30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
                 </View>
               </View>
               <View style={{flex: .2, flexDirection: 'row', marginBottom: 40}}>
               <View style={{flex: 1}}>
-                <FormLabel>Nombre Equip:</FormLabel>
-                <FormInput/>
+                <FormLabel>Nombre Equipo:</FormLabel>
+                <FormInput defaultValue={this.state.Seleccion.sNombre} />
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Estadio:</FormLabel>
-                <FormInput/>
+                <FormInput defaultValue={this.state.Seleccion.sEstadio}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2,flexDirection: 'row', marginBottom: 40}}>
               <View style={{flex: 1}}>
                 <FormLabel>Url Estadio:</FormLabel>
-                <FormInput/>
+                <FormInput defaultValue={this.state.Seleccion.uEstadio}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Url Escudo:</FormLabel>
-                <FormInput/>
+                <FormInput defaultValue={this.state.Seleccion.uEscudo}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
@@ -164,18 +165,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   Modal: {
-    alignItems: 'flex-start',
     borderRadius: 20,
     shadowRadius: 20,
-    width: Dimensions.get('window').width - 80,
-    height: 430
+    width: Dimensions.get('window').width - 60,
+    height: 340
   },
   HeaderModal: {
-    flex: .1,
+    flex: .2,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     shadowRadius: 20,
-    width: Dimensions.get('window').width - 80,
+    width: Dimensions.get('window').width - 60,
     backgroundColor: '#039be5'
   }, 
 });
