@@ -11,11 +11,11 @@ import JugadorCont from '../Controllers/JugadorController';
 export default class JugadoresView extends React.Component {
   constructor(props){ 
     super(props);
-    this.state ={ isLoading: false, Jugadores: [], Backup: [], Añadir: false, Seleccion: {}}
+    this.state ={ isLoading: false, Jugadores: [], Backup: [], Añadir: false, Seleccion: {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}}
   }
   componentDidMount(){
     JugadorCont.Get().then((res) =>{
-      this.ChangeState(true, res, res, false, {});
+      this.ChangeState(true, res, res, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''});
     });
   }
   ChangeState(Load, Jugadores, Backup, Añadir, Seleccion){
@@ -28,7 +28,7 @@ export default class JugadoresView extends React.Component {
     }, function(){});
   }
   Añadir(){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {});
+    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''});
     this.refs.Modal.open();
   }
   ButtonCard(Jugador){
@@ -45,6 +45,7 @@ export default class JugadoresView extends React.Component {
     )
   }
   render() {
+    const Titulo = this.state.Añadir ? ('Registrar') : (this.state.Seleccion.sNombre);
     const button = this.state.Añadir ? (
       <View style={{flex: .2, flexDirection: 'row'}}>
       <View style={{flex: 1}}>
@@ -106,36 +107,36 @@ export default class JugadoresView extends React.Component {
             <View style={{flex: .2, flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Jugador:</FormLabel>
-                <FormInput/>
+                <FormInput defaultValue={this.state.Seleccion.sNombre}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Edad Jugador:</FormLabel>
-                <FormInput/>
+                <FormInput defaultValue={this.state.Seleccion.iEdad}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2,flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Posición:</FormLabel>
-                <FormInput/>
+                <FormInput defaultValue={this.state.Seleccion.sPosicion}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Nacionalidad:</FormLabel>
-                <FormInput/>
+                <FormInput defaultValue={this.state.Seleccion.sNacionalidad}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2,flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Url Selección:</FormLabel>
-                <FormInput/>
+                <FormInput defaultValue={this.state.Seleccion.uNacionalidad}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Url Persona:</FormLabel>
-                <FormInput/>
+                <FormInput defaultValue={this.state.Seleccion.uJugador}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>

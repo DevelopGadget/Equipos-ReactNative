@@ -48,7 +48,7 @@ export default class EquiposView extends React.Component {
     this.refs.Modal.open();
   }
   render() {
-    const Titulo = this.state.Añadir ? ('') : (this.state.Seleccion.sNombre);
+    const Titulo = this.state.Añadir ? ('Registrar') : (this.state.Seleccion.sNombre);
     const button = this.state.Añadir ? (
       <View style={{flex: .2, flexDirection: 'row', marginTop: 40}}>
       <View style={{flex: 1}}>
@@ -111,7 +111,7 @@ export default class EquiposView extends React.Component {
               <View style={{flex: .2, flexDirection: 'row', marginBottom: 40}}>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Equipo:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.sNombre} />
+                <FormInput defaultValue={this.state.Seleccion.sNombre}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
