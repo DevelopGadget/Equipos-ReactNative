@@ -7,15 +7,21 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import ModalDropdown from 'react-native-modal-dropdown';
 import { TabNavigator } from 'react-navigation';
 import JugadorCont from '../Controllers/JugadorController';
+import EquiposCont from '../Controllers/EquipoController';
 
 export default class JugadoresView extends React.Component {
   constructor(props){ 
     super(props);
-    this.state ={ isLoading: false, Jugadores: [], Backup: [], Añadir: false, Seleccion: {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}}
+    this.state ={ isLoading: false, Jugadores: [], Backup: [], Añadir: false, Seleccion: {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, Equipos: []}
   }
   componentDidMount(){
     JugadorCont.Get().then((res) =>{
-      this.ChangeState(true, res, res, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''});
+      this.ChangeState(true, res, res, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, []);
+    });
+    EquiposCont.Get().then((res) =>{
+      res.map((Equipo, i) =>{
+        this.ChangeState(true, this.state.Backup, this.state.Backup, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, this.state.Equipos.push(res.sNombre));
+      });
     });
   }
   ChangeState(Load, Jugadores, Backup, Añadir, Seleccion){
@@ -28,11 +34,11 @@ export default class JugadoresView extends React.Component {
     }, function(){});
   }
   Añadir(){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''});
+    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, this.state.Equipos);
     this.refs.Modal.open();
   }
   ButtonCard(Jugador){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Jugador);
+    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Jugador, this.state.Equipos);
     this.refs.Modal.open();
   }
   static navigationOptions = {
@@ -143,7 +149,7 @@ export default class JugadoresView extends React.Component {
             <View style={{flex: .2, flexDirection: 'row', marginTop: 20}}>
               <View style={{flex: 1}}>
                 <FormLabel>Seleccione Equipo:</FormLabel>
-                <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox}  options={['opción 1','opción 2','opción 3']} defaultValue={'opción 1'}/>
+                <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox}  options={this.state.Equipos} defaultValue={this.state.Seleccion.sEquipo.sNombre}/>
               </View>
             </View>
             {button}
