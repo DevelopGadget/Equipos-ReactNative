@@ -18,19 +18,22 @@ export default class JugadoresView extends React.Component {
     JugadorCont.Get().then((res) =>{
       this.ChangeState(true, res, res, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, []);
     });
+    const Equipos = [];
     EquiposCont.Get().then((res) =>{
       res.map((Equipo, i) =>{
-        this.ChangeState(true, this.state.Backup, this.state.Backup, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, this.state.Equipos.push(res.sNombre));
+         Equipos.push(Equipo.sNombre);
       });
+      this.ChangeState(true, this.state.Backup, this.state.Backup, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''},   Equipos);
     });
   }
-  ChangeState(Load, Jugadores, Backup, Añadir, Seleccion){
+  ChangeState(Load, Jugadores, Backup, Añadir, Seleccion, Equipos){
     this.setState({
       isLoading: Load,
       Jugadores: Jugadores,
       Backup: Backup,
       Añadir: Añadir,
-      Seleccion: Seleccion
+      Seleccion: Seleccion,
+      Equipos: Equipos
     }, function(){});
   }
   Añadir(){
@@ -106,7 +109,7 @@ export default class JugadoresView extends React.Component {
         <Modal style={[styles.Modal]} position={"center"} ref={"Modal"} isDisabled={false} backdropPressToClose={false} swipeToClose={false}>
             <View style={styles.HeaderModal}>
               <View style={styles.Container}>
-                <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 4}}>Nombre Del Jugador</Text>
+                <Text style={{fontWeight: 'bold', color: 'white', marginLeft: 10, marginTop: 10, flex: 4}}>{Titulo}</Text>
                 <Button large iconRight={{ name: 'times', type: 'font-awesome', size: 30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
               </View>
             </View>
@@ -118,7 +121,7 @@ export default class JugadoresView extends React.Component {
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Edad Jugador:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.iEdad}/>
+                <FormInput defaultValue={this.state.Seleccion.iEdad.toString()}/>
                 <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
@@ -149,7 +152,7 @@ export default class JugadoresView extends React.Component {
             <View style={{flex: .2, flexDirection: 'row', marginTop: 20}}>
               <View style={{flex: 1}}>
                 <FormLabel>Seleccione Equipo:</FormLabel>
-                <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox}  options={this.state.Equipos} defaultValue={this.state.Seleccion.sEquipo.sNombre}/>
+                <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox} textStyle={{fontSize: 14, marginTop: 4, marginLeft: 20}} options={this.state.Equipos} defaultValue={this.state.Seleccion.sEquipo.sNombre}/>
               </View>
             </View>
             {button}
@@ -189,7 +192,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     shadowRadius: 20,
     width: Dimensions.get('window').width - 60,
-    height: 430
+    height: 480
   },
   HeaderModal: {
     flex: .1,
