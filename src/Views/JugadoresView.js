@@ -56,13 +56,13 @@ export default class JugadoresView extends React.Component {
   render() {
     const Titulo = this.state.Añadir ? ('Registrar') : (this.state.Seleccion.sNombre);
     const button = this.state.Añadir ? (
-      <View style={{flex: .2, flexDirection: 'row'}}>
+      <View style={{flex: .2, flexDirection: 'row', marginTop: 10}}>
       <View style={{flex: 1}}>
         <Button large icon={{ name: 'location-arrow', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={[styles.Boton, {backgroundColor: '#00e676'}]}/>
       </View>
     </View>
     ) : (
-      <View style={{flex: .2, flexDirection: 'row'}}>
+      <View style={{flex: .2, flexDirection: 'row', marginTop: 10}}>
         <View style={{flex: 1}}>
           <Button large icon={{ name: 'wrench', type: 'font-awesome', size: 30}} title='Modificar' buttonStyle={[styles.Boton, {backgroundColor: '#448aff'}]}/>
         </View>
@@ -141,18 +141,19 @@ export default class JugadoresView extends React.Component {
               <View style={{flex: 1}}>
                 <FormLabel>Url Selección:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.uNacionalidad}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Url Persona:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.uJugador}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
             </View>
-            <View style={{flex: .2, flexDirection: 'row', marginTop: 20}}>
+            <View style={{flex: .2, flexDirection: 'row', marginTop: 15}}>
               <View style={{flex: 1}}>
                 <FormLabel>Seleccione Equipo:</FormLabel>
                 <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox} textStyle={{fontSize: 14, marginTop: 4, marginLeft: 20}} options={this.state.Equipos} defaultValue={this.state.Seleccion.sEquipo.sNombre}/>
+                <FormValidationMessage>{'Seleccione un equipo'}</FormValidationMessage>
               </View>
             </View>
             {button}
@@ -192,10 +193,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     shadowRadius: 20,
     width: Dimensions.get('window').width - 60,
-    height: 480
+    height: Dimensions.get('window').height - 80
   },
   HeaderModal: {
-    flex: .1,
+    flex: .08,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     shadowRadius: 20,

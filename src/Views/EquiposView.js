@@ -14,11 +14,12 @@ export default class EquiposView extends React.Component {
       'Warning: componentWillMount is deprecated',
       'Warning: componentWillReceiveProps is deprecated',
     ]);
-    this.state ={ isLoading: false, Equipos: [], Backup: [], Añadir: false, Seleccion: {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}}
+    this.state ={ isLoading: false, Equipos: [], Backup: [], Añadir: false, Seleccion: {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, 
+    Valid:{sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true}}
   }
   componentDidMount(){
     EquiposCont.Get().then((res) =>{
-      this.ChangeState(true, res, res, false, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''});
+      this.ChangeState(true, res, res, false, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true});
     });
   }
   static navigationOptions = {
@@ -30,21 +31,22 @@ export default class EquiposView extends React.Component {
       />
     ) 
   }
-  ChangeState(Load, Equipos, Backup, Añadir, Seleccion){
+  ChangeState(Load, Equipos, Backup, Añadir, Seleccion, Valid){
     this.setState({
       isLoading: Load,
       Equipos: Equipos,
       Backup: Backup,
       Añadir: Añadir,
-      Seleccion: Seleccion
+      Seleccion: Seleccion,
+      Valid: Valid
     }, function(){});
   }
   Añadir(){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''});
+    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true});
     this.refs.Modal.open();
   }
   ButtonCard(Equipo){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Equipo);
+    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Equipo, {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true});
     this.refs.Modal.open();
   }
   render() {
@@ -75,7 +77,7 @@ export default class EquiposView extends React.Component {
                     lightTheme
                     searchIcon={{ size: 30 }}
                     clearIcon={{ color: 'red' }}
-                    onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''})}
+                    onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true})}
                   placeholder='Buscar' />
                 </View>
                 <View style={{flex: 1, marginTop: 30,}}>
@@ -108,28 +110,28 @@ export default class EquiposView extends React.Component {
                   <Button large iconRight={{ name: 'times', type: 'font-awesome', size: 30}} buttonStyle={{backgroundColor: '#039be5', flex: .5, borderWidth: 0}} onPress={() => this.refs.Modal.close()}/>
                 </View>
               </View>
-              <View style={{flex: .2, flexDirection: 'row', marginBottom: 40}}>
+              <View style={{flex: .3, flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Equipo:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.sNombre}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.sNombre ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Estadio:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.sEstadio}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.sEstadio ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
-            <View style={{flex: .2,flexDirection: 'row', marginBottom: 40}}>
+            <View style={{flex: .3,flexDirection: 'row'}} marginTop={20}>
               <View style={{flex: 1}}>
                 <FormLabel>Url Estadio:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.uEstadio}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.uEstadio ? null :'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Url Escudo:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.uEscudo}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.uEquipo ? null :'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
             </View>
             {button}
@@ -168,10 +170,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     shadowRadius: 20,
     width: Dimensions.get('window').width - 60,
-    height: 340
+    height: 320
   },
   HeaderModal: {
-    flex: .2,
+    flex: .15,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     shadowRadius: 20,
