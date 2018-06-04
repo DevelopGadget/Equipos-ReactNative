@@ -12,36 +12,37 @@ import EquiposCont from '../Controllers/EquipoController';
 export default class JugadoresView extends React.Component {
   constructor(props){ 
     super(props);
-    this.state ={ isLoading: false, Jugadores: [], Backup: [], Añadir: false, Seleccion: {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, Equipos: []}
+    this.state ={ isLoading: false, Jugadores: [], Backup: [], Añadir: false, Seleccion: {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, Equipos: [], Valid: {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true}}
   }
   componentDidMount(){
     JugadorCont.Get().then((res) =>{
-      this.ChangeState(true, res, res, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, []);
+      this.ChangeState(true, res, res, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, [], {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
     });
     const Equipos = [];
     EquiposCont.Get().then((res) =>{
       res.map((Equipo, i) =>{
          Equipos.push(Equipo.sNombre);
       });
-      this.ChangeState(true, this.state.Backup, this.state.Backup, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''},   Equipos);
+      this.ChangeState(true, this.state.Backup, this.state.Backup, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, Equipos, {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
     });
   }
-  ChangeState(Load, Jugadores, Backup, Añadir, Seleccion, Equipos){
+  ChangeState(Load, Jugadores, Backup, Añadir, Seleccion, Equipos, Valid){
     this.setState({
       isLoading: Load,
       Jugadores: Jugadores,
       Backup: Backup,
       Añadir: Añadir,
       Seleccion: Seleccion,
-      Equipos: Equipos
+      Equipos: Equipos,
+      Valid: Valid
     }, function(){});
   }
   Añadir(){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, this.state.Equipos);
+    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, this.state.Equipos, {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
     this.refs.Modal.open();
   }
   ButtonCard(Jugador){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Jugador, this.state.Equipos);
+    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Jugador, this.state.Equipos,{Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
     this.refs.Modal.open();
   }
   static navigationOptions = {
@@ -81,7 +82,7 @@ export default class JugadoresView extends React.Component {
                 lightTheme
                 searchIcon={{ size: 30 }}
                 clearIcon={{ color: 'red' }}
-                onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {})}
+                onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {}, {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true})}
                placeholder='Buscar' />
             </View>
             <View style={{flex: 1, marginTop: 30,}}>
@@ -117,43 +118,43 @@ export default class JugadoresView extends React.Component {
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Jugador:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.sNombre}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{his.state.Valid.sNombre ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Edad Jugador:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.iEdad.toString()}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{his.state.Valid.iEdad ? null : 'Valor numerico'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2,flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Posición:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.sPosicion}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{his.state.Valid.sPosicion ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Nacionalidad:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.sNacionalidad}/>
-                <FormValidationMessage>{'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{his.state.Valid.sNacionalidad ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2,flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Url Selección:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.uNacionalidad}/>
-                <FormValidationMessage>{'Tiene que ser Url de imagen'}</FormValidationMessage>
+                <FormValidationMessage>{his.state.Valid.uNacionalidad ? null : 'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Url Persona:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.uJugador}/>
-                <FormValidationMessage>{'Tiene que ser Url de imagen'}</FormValidationMessage>
+                <FormValidationMessage>{his.state.Valid.uJugador ? null : 'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2, flexDirection: 'row', marginTop: 15}}>
               <View style={{flex: 1}}>
                 <FormLabel>Seleccione Equipo:</FormLabel>
                 <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox} textStyle={{fontSize: 14, marginTop: 4, marginLeft: 20}} options={this.state.Equipos} defaultValue={this.state.Seleccion.sEquipo.sNombre}/>
-                <FormValidationMessage>{'Seleccione un equipo'}</FormValidationMessage>
+                <FormValidationMessage>{his.state.Valid.sEquipo ? null : 'Seleccione un equipo'}</FormValidationMessage>
               </View>
             </View>
             {button}
