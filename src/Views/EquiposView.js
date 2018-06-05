@@ -51,14 +51,14 @@ export default class EquiposView extends React.Component {
   }
   ValidEquipo(Equipo){
     var Nombre = true, Estadio = true, UrlE = true, UrlEs = true;
-    if(Equipo.sNombre == null || Equipo.sNombre.length == 0){
+    if(Equipo.sNombre == null || Equipo.sNombre.length <= 0){
       Nombre = false;
     }
-    if(Equipo.sEstadio == null || Equipo.sEstadio.length == 0){
+    if(Equipo.sEstadio == null || Equipo.sEstadio.length <= 0){
       Estadio = false;
     }
     this.ChangeState(this.state.isLoading, this.state.Backup, this.state.Backup, this.state.Añadir, this.state.Seleccion, {sNombre: Nombre, sEstadio: Estadio, uEquipo: UrlE, uEstadio: UrlEs});
-    console.log(Nombre+'  '+Estadio+'  '+UrlE+'  '+UrlEs);
+    
   }
 
   render() {

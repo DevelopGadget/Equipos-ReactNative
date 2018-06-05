@@ -45,6 +45,24 @@ export default class JugadoresView extends React.Component {
     this.ChangeState(true, this.state.Backup, this.state.Backup, false, Jugador, this.state.Equipos,{Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
     this.refs.Modal.open();
   }
+  ValidJugador(Jugador, index){
+    var N = true, E = true, Nac = true, J = true,  uNac = true, Equ = true, Pos = true;
+    if(Jugador.sNombre == null || Jugador.sNombre.lenght <= 0){
+      N = false;
+    }
+    if(Jugador.iEdad == null || Jugador.iEdad <= 0){
+      E = false;
+    }
+    if(Jugador.sNacionalidad == null || Jugador.sNacionalidad.lenght <= 0){
+      Nac = false;
+    }
+    if(Jugador.sPosicion == null || Jugador.sPosicion.lenght <= 0){
+      Pos = false;
+    }
+    if(Jugador.sPosicion == null || Jugador.sPosicion.lenght <= 0){
+      Pos = false;
+    }
+  }
   static navigationOptions = {
     tabBarLabel: 'Jugdores',
     tabBarIcon: ({ focused,tintColor }) => (
@@ -118,43 +136,43 @@ export default class JugadoresView extends React.Component {
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Jugador:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.sNombre}/>
-                <FormValidationMessage>{his.state.Valid.sNombre ? null : 'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.sNombre ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Edad Jugador:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.iEdad.toString()}/>
-                <FormValidationMessage>{his.state.Valid.iEdad ? null : 'Valor numerico'}</FormValidationMessage>
+                <FormInput defaultValue={this.state.Seleccion.iEdad.toString()} keyboardType={'numeric'} maxLength={2}/>
+                <FormValidationMessage>{this.state.Valid.iEdad ? null : 'Edad invalida'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2,flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Posición:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.sPosicion}/>
-                <FormValidationMessage>{his.state.Valid.sPosicion ? null : 'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.sPosicion ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Nacionalidad:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.sNacionalidad}/>
-                <FormValidationMessage>{his.state.Valid.sNacionalidad ? null : 'Campo vacio'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.sNacionalidad ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2,flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Url Selección:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.uNacionalidad}/>
-                <FormValidationMessage>{his.state.Valid.uNacionalidad ? null : 'Tiene que ser Url de imagen'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.uNacionalidad ? null : 'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Url Persona:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.uJugador}/>
-                <FormValidationMessage>{his.state.Valid.uJugador ? null : 'Tiene que ser Url de imagen'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.uJugador ? null : 'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2, flexDirection: 'row', marginTop: 15}}>
               <View style={{flex: 1}}>
                 <FormLabel>Seleccione Equipo:</FormLabel>
                 <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox} textStyle={{fontSize: 14, marginTop: 4, marginLeft: 20}} options={this.state.Equipos} defaultValue={this.state.Seleccion.sEquipo.sNombre}/>
-                <FormValidationMessage>{his.state.Valid.sEquipo ? null : 'Seleccione un equipo'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.sEquipo ? null : 'Seleccione un equipo'}</FormValidationMessage>
               </View>
             </View>
             {button}
