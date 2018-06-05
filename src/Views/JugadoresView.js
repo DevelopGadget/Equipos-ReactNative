@@ -16,7 +16,7 @@ export default class JugadoresView extends React.Component {
   }
   componentDidMount(){
     JugadorCont.Get().then((res) =>{
-      this.ChangeState(true, res, res, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, [], {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
+      this.setState({ isLoading: true, Jugadores: res, Backup: res});
     });
     const Equipos = [];
     EquiposCont.Get().then((res) =>{
@@ -24,26 +24,15 @@ export default class JugadoresView extends React.Component {
       res.map((Equipo, i) =>{
          Equipos.push(Equipo.sNombre);
       });
-      this.ChangeState(true, this.state.Backup, this.state.Backup, false, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, Equipos, {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
+      this.setState({Equipos: Equipos});
     });
   }
-  ChangeState(Load, Jugadores, Backup, Añadir, Seleccion, Equipos, Valid){
-    this.setState({
-      isLoading: Load,
-      Jugadores: Jugadores,
-      Backup: Backup,
-      Añadir: Añadir,
-      Seleccion: Seleccion,
-      Equipos: Equipos,
-      Valid: Valid
-    }, function(){});
-  }
   Añadir(){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, this.state.Equipos, {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
+    this.setState({ Añadir: true, Seleccion: {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, Valid: {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true}});
     this.refs.Modal.open();
   }
   ButtonCard(Jugador){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Jugador, this.state.Equipos,{Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
+    this.setState({Añadir: false, Seleccion: Jugador, Valid: {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true}});
     this.refs.Modal.open();
   }
   ValidJugador(Jugador){
@@ -63,6 +52,7 @@ export default class JugadoresView extends React.Component {
     if(Jugador.sPosicion == null || Jugador.sPosicion.lenght <= 0){
       Pos = false;
     }
+    this.setState({Valid: {Id: true, sNombre: N, iEdad: E, sNacionalidad: Nac, uJugador: J, uNacionalidad: uNac, sEquipo: true, sPosicion: Pos}})
   }
   ValidCombo(index){
     var Comb = true, Sel = [];
@@ -76,7 +66,7 @@ export default class JugadoresView extends React.Component {
       });
       console.log(Sel);
     }
-    this.ChangeState(this.state.isLoading, this.state.Backup, this.state.Backup, this.state.Añadir, {Id: this.state.Seleccion.Id, sNombre: this.state.Seleccion.sNombre, iEdad: this.state.Seleccion.iEdad, sNacionalidad: this.state.Seleccion.sNacionalidad, uJugador: this.state.Seleccion.uJugador, uNacionalidad: this.state.Seleccion.uNacionalidad, sEquipo: Sel, sPosicion: this.state.Seleccion.sPosicion}, this.state.Equipos,{Id: true, sNombre: this.state.Valid.sNombre, iEdad: this.state.Valid.iEdad, sNacionalidad: this.state.Valid.sNacionalidad, uJugador: this.state.Valid.uJugador, uNacionalidad: this.state.Valid.uNacionalidad, sEquipo: Comb, sPosicion: this.state.Valid.sPosicion});
+    this.setState({ Seleccion: {Id: this.state.Seleccion.Id, sNombre: this.state.Seleccion.sNombre, iEdad: this.state.Seleccion.iEdad, sNacionalidad: this.state.Seleccion.sNacionalidad, uJugador: this.state.Seleccion.uJugador, uNacionalidad: this.state.Seleccion.uNacionalidad, sEquipo: Sel, sPosicion: this.state.Seleccion.sPosicion}, Valid: {Id: true, sNombre: this.state.Valid.sNombre, iEdad: this.state.Valid.iEdad, sNacionalidad: this.state.Valid.sNacionalidad, uJugador: this.state.Valid.uJugador, uNacionalidad: this.state.Valid.uNacionalidad, sEquipo: Comb, sPosicion: this.state.Valid.sPosicion}});
   }
   static navigationOptions = {
     tabBarLabel: 'Jugdores',
@@ -115,7 +105,7 @@ export default class JugadoresView extends React.Component {
                 lightTheme
                 searchIcon={{ size: 30 }}
                 clearIcon={{ color: 'red' }}
-                onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {}, {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true})}
+                onChangeText={(Text) => this.setState({Jugadores: this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())})})}
                placeholder='Buscar' />
             </View>
             <View style={{flex: 1, marginTop: 30,}}>
@@ -150,36 +140,36 @@ export default class JugadoresView extends React.Component {
             <View style={{flex: .2, flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Jugador:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.sNombre}/>
+                <FormInput defaultValue={this.state.Seleccion.sNombre} onChangeText={(sNombre) => this.setState({Seleccion : {Id: this.state.Seleccion.Id, sNombre: sNombre, iEdad: this.state.Seleccion.iEdad, sNacionalidad: this.state.Seleccion.sNacionalidad, uJugador: this.state.Seleccion.uJugador, uNacionalidad: this.state.Seleccion.uNacionalidad, sEquipo: this.state.Seleccion.sEquipo , sPosicion: this.state.Seleccion.sPosicion}})}/>
                 <FormValidationMessage>{this.state.Valid.sNombre ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Edad Jugador:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.iEdad.toString()} keyboardType={'numeric'} maxLength={2}/>
+                <FormInput defaultValue={this.state.Seleccion.iEdad.toString()} keyboardType={'numeric'} maxLength={2} onChangeText={(iEdad) => this.setState({Seleccion : {Id: this.state.Seleccion.Id, sNombre: this.state.Seleccion.sNombre, iEdad: iEdad, sNacionalidad: this.state.Seleccion.sNacionalidad, uJugador: this.state.Seleccion.uJugador, uNacionalidad: this.state.Seleccion.uNacionalidad, sEquipo: this.state.Seleccion.sEquipo, sPosicion: this.state.Seleccion.sPosicion}})}/>
                 <FormValidationMessage>{this.state.Valid.iEdad ? null : 'Edad invalida'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2,flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Posición:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.sPosicion}/>
+                <FormInput defaultValue={this.state.Seleccion.sPosicion} onChangeText={(sPosicion) => this.setState({Seleccion : {Id: this.state.Seleccion.Id, sNombre: this.state.Seleccion.sNombre, iEdad: this.state.Seleccion.iEdad, sNacionalidad: this.state.Seleccion.sNacionalidad, uJugador: this.state.Seleccion.uJugador, uNacionalidad: this.state.Seleccion.uNacionalidad, sEquipo: this.state.Seleccion.sEquipo, sPosicion: sPosicion}})}/>
                 <FormValidationMessage>{this.state.Valid.sPosicion ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Nacionalidad:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.sNacionalidad}/>
+                <FormInput defaultValue={this.state.Seleccion.sNacionalidad} onChangeText={(sNacionalidad) => this.setState({Seleccion : {Id: this.state.Seleccion.Id, sNombre: this.state.Seleccion.sNombre, iEdad: this.state.Seleccion.iEdad, sNacionalidad: sNacionalidad, uJugador: this.state.Seleccion.uJugador, uNacionalidad: this.state.Seleccion.uNacionalidad, sEquipo: this.state.Seleccion.sEquipo, sPosicion: this.state.Seleccion.sPosicion}})}/>
                 <FormValidationMessage>{this.state.Valid.sNacionalidad ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .2,flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Url Selección:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.uNacionalidad}/>
+                <FormInput defaultValue={this.state.Seleccion.uNacionalidad} onChangeText={(uNacionalidad) => this.setState({Seleccion : {Id: this.state.Seleccion.Id, sNombre: this.state.Seleccion.sNombre, iEdad: this.state.Seleccion.iEdad, sNacionalidad: this.state.Seleccion.sNacionalidad, uJugador: this.state.Seleccion.uJugador, uNacionalidad: uNacionalidad, sEquipo: this.state.Seleccion.sEquipo, sPosicion: this.state.Seleccion.sPosicion}})}/>
                 <FormValidationMessage>{this.state.Valid.uNacionalidad ? null : 'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Url Persona:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.uJugador}/>
+                <FormInput defaultValue={this.state.Seleccion.uJugador} onChangeText={(uJugador) => this.setState({Seleccion : {Id: this.state.Seleccion.Id, sNombre: this.state.Seleccion.sNombre, iEdad: this.state.Seleccion.iEdad, sNacionalidad: this.state.Seleccion.sNacionalidad, uJugador: this.state.Seleccion.uJugador, uNacionalidad: uNacionalidad, sEquipo: this.state.Seleccion.sEquipo, sPosicion: this.state.Seleccion.sPosicion}})}/>
                 <FormValidationMessage>{this.state.Valid.uJugador ? null : 'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
             </View>

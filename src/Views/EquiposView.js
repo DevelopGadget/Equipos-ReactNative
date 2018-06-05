@@ -32,7 +32,7 @@ export default class EquiposView extends React.Component {
     ) 
   }
   Añadir(){
-    this.setState({Añadir : true, Seleccion : {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}});
+    this.setState({Añadir : true, Seleccion : {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, Valid: {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true}});
     this.refs.Modal.open();
   }
   ButtonCard(Equipo){
