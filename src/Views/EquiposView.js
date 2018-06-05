@@ -58,7 +58,6 @@ export default class EquiposView extends React.Component {
       Estadio = false;
     }
     this.ChangeState(this.state.isLoading, this.state.Backup, this.state.Backup, this.state.Añadir, this.state.Seleccion, {sNombre: Nombre, sEstadio: Estadio, uEquipo: UrlE, uEstadio: UrlEs});
-    
   }
 
   render() {
@@ -149,7 +148,7 @@ export default class EquiposView extends React.Component {
             {button}
             </Modal>
           </View>
-        ); 
+       ); 
     }else{
       return (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', height: 100}}>

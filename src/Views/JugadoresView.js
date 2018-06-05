@@ -12,7 +12,7 @@ import EquiposCont from '../Controllers/EquipoController';
 export default class JugadoresView extends React.Component {
   constructor(props){ 
     super(props);
-    this.state ={ isLoading: false, Jugadores: [], Backup: [], Añadir: false, Seleccion: {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, Equipos: [], Valid: {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true}}
+    this.state ={ isLoading: false, Jugadores: [], Backup: [], Añadir: false, Seleccion: {Id: '', sNombre: '', iEdad: '', sNacionalidad: '', uJugador: '', uNacionalidad: '', sEquipo: {}, sPosicion: ''}, Equipos: [], Valid: {Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true}, Res: []}
   }
   componentDidMount(){
     JugadorCont.Get().then((res) =>{
@@ -20,6 +20,7 @@ export default class JugadoresView extends React.Component {
     });
     const Equipos = [];
     EquiposCont.Get().then((res) =>{
+      this.setState({Res: res});
       res.map((Equipo, i) =>{
          Equipos.push(Equipo.sNombre);
       });
@@ -45,8 +46,8 @@ export default class JugadoresView extends React.Component {
     this.ChangeState(true, this.state.Backup, this.state.Backup, false, Jugador, this.state.Equipos,{Id: true, sNombre: true, iEdad: true, sNacionalidad: true, uJugador: true, uNacionalidad: true, sEquipo: true, sPosicion: true});
     this.refs.Modal.open();
   }
-  ValidJugador(Jugador, index){
-    var N = true, E = true, Nac = true, J = true,  uNac = true, Equ = true, Pos = true;
+  ValidJugador(Jugador){
+    var N = true, E = true, Nac = true, J = true,  uNac = true, Pos = true;
     if(Jugador.sNombre == null || Jugador.sNombre.lenght <= 0){
       N = false;
     }
@@ -63,6 +64,20 @@ export default class JugadoresView extends React.Component {
       Pos = false;
     }
   }
+  ValidCombo(index){
+    var Comb = true, Sel = [];
+    if(index <= -1){
+      Comb = false;
+    }else{
+      this.state.Res.map((Equipo, i) =>{
+        if(i == index){
+          Sel = Equipo;
+        }
+      });
+      console.log(Sel);
+    }
+    this.ChangeState(this.state.isLoading, this.state.Backup, this.state.Backup, this.state.Añadir, {Id: this.state.Seleccion.Id, sNombre: this.state.Seleccion.sNombre, iEdad: this.state.Seleccion.iEdad, sNacionalidad: this.state.Seleccion.sNacionalidad, uJugador: this.state.Seleccion.uJugador, uNacionalidad: this.state.Seleccion.uNacionalidad, sEquipo: Sel, sPosicion: this.state.Seleccion.sPosicion}, this.state.Equipos,{Id: true, sNombre: this.state.Valid.sNombre, iEdad: this.state.Valid.iEdad, sNacionalidad: this.state.Valid.sNacionalidad, uJugador: this.state.Valid.uJugador, uNacionalidad: this.state.Valid.uNacionalidad, sEquipo: Comb, sPosicion: this.state.Valid.sPosicion});
+  }
   static navigationOptions = {
     tabBarLabel: 'Jugdores',
     tabBarIcon: ({ focused,tintColor }) => (
@@ -77,7 +92,7 @@ export default class JugadoresView extends React.Component {
     const button = this.state.Añadir ? (
       <View style={{flex: .2, flexDirection: 'row', marginTop: 10}}>
       <View style={{flex: 1}}>
-        <Button large icon={{ name: 'location-arrow', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={[styles.Boton, {backgroundColor: '#00e676'}]}/>
+        <Button large icon={{ name: 'location-arrow', type: 'font-awesome', size: 30}} title='Añadir' buttonStyle={[styles.Boton, {backgroundColor: '#00e676'}]} onPress={() => this.ValidJugador(this.state.Seleccion)}/>
       </View>
     </View>
     ) : (
@@ -171,7 +186,7 @@ export default class JugadoresView extends React.Component {
             <View style={{flex: .2, flexDirection: 'row', marginTop: 15}}>
               <View style={{flex: 1}}>
                 <FormLabel>Seleccione Equipo:</FormLabel>
-                <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox} textStyle={{fontSize: 14, marginTop: 4, marginLeft: 20}} options={this.state.Equipos} defaultValue={this.state.Seleccion.sEquipo.sNombre}/>
+                <ModalDropdown dropdownStyle={{width: 100}} style={styles.ComboBox} textStyle={{fontSize: 14, marginTop: 4, marginLeft: 20}} options={this.state.Equipos} defaultValue={this.state.Seleccion.sEquipo.sNombre} onSelect={(index) => this.ValidCombo(index)}/>
                 <FormValidationMessage>{this.state.Valid.sEquipo ? null : 'Seleccione un equipo'}</FormValidationMessage>
               </View>
             </View>
