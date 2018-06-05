@@ -19,7 +19,7 @@ export default class EquiposView extends React.Component {
   }
   componentDidMount(){
     EquiposCont.Get().then((res) =>{
-      this.ChangeState(true, res, res, false, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true});
+      this.setState({ isLoading: true, Equipos: res, Backup: res});
     });
   }
   static navigationOptions = {
@@ -31,22 +31,12 @@ export default class EquiposView extends React.Component {
       />
     ) 
   }
-  ChangeState(Load, Equipos, Backup, Añadir, Seleccion, Valid){
-    this.setState({
-      isLoading: Load,
-      Equipos: Equipos,
-      Backup: Backup,
-      Añadir: Añadir,
-      Seleccion: Seleccion,
-      Valid: Valid
-    }, function(){});
-  }
   Añadir(){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, true, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true});
+    this.setState({Añadir : true, Seleccion : {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}});
     this.refs.Modal.open();
   }
   ButtonCard(Equipo){
-    this.ChangeState(true, this.state.Backup, this.state.Backup, false, Equipo, {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true});
+    this.setState({Añadir : false, Seleccion : Equipo, Valid:{sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true}});
     this.refs.Modal.open();
   }
   ValidEquipo(Equipo){
@@ -57,7 +47,7 @@ export default class EquiposView extends React.Component {
     if(Equipo.sEstadio == null || Equipo.sEstadio.length <= 0){
       Estadio = false;
     }
-    this.ChangeState(this.state.isLoading, this.state.Backup, this.state.Backup, this.state.Añadir, this.state.Seleccion, {sNombre: Nombre, sEstadio: Estadio, uEquipo: UrlE, uEstadio: UrlEs});
+    this.setState({Valid : {sNombre: Nombre, sEstadio: Estadio, uEquipo: UrlE, uEstadio: UrlEs}});
   }
 
   render() {
@@ -88,7 +78,7 @@ export default class EquiposView extends React.Component {
                     lightTheme
                     searchIcon={{ size: 30 }}
                     clearIcon={{ color: 'red' }}
-                    onChangeText={(Text) => this.ChangeState(true, this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())}), this.state.Backup, false, {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true})}
+                    onChangeText={(Text) => this.setState({ Equipos: this.state.Backup.filter(item => {return item.sNombre.match(Text.toUpperCase())})})}
                   placeholder='Buscar' />
                 </View>
                 <View style={{flex: 1, marginTop: 30,}}>
@@ -124,24 +114,24 @@ export default class EquiposView extends React.Component {
               <View style={{flex: .3, flexDirection: 'row'}}>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Equipo:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.sNombre} onChangeText={(sNombre) => this.ChangeState(this.state.isLoading, this.state.Backup, this.state.Backup, this.state.Añadir, {sNombre: sNombre, sEstadio: this.state.Seleccion.sEstadio, Id: this.state.Seleccion.Id, uEstadio: this.state.Seleccion.uEstadio, uEscudo: this.state.Seleccion.uEscudo}, this.state.Valid)}/>
+                <FormInput defaultValue={this.state.Seleccion.sNombre} onChangeText={(sNombre) => this.setState({Seleccion : {sNombre: sNombre, sEstadio: this.state.Seleccion.sEstadio, Id: this.state.Seleccion.Id, uEstadio: this.state.Seleccion.uEstadio, uEscudo: this.state.Seleccion.uEscudo}})}/>
                 <FormValidationMessage>{this.state.Valid.sNombre ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Nombre Estadio:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.sEstadio} onChangeText={(sEstadio) => this.ChangeState(this.state.isLoading, this.state.Backup, this.state.Backup, this.state.Añadir, {sNombre: this.state.Seleccion.sNombre, sEstadio: sEstadio, Id: this.state.Seleccion.Id, uEstadio: this.state.Seleccion.uEstadio, uEscudo: this.state.Seleccion.uEscudo}, this.state.Valid)}/>
+                <FormInput defaultValue={this.state.Seleccion.sEstadio} onChangeText={(sEstadio) => this.setState({Seleccion : {sNombre: this.state.Seleccion.sNombre, sEstadio: sEstadio, Id: this.state.Seleccion.Id, uEstadio: this.state.Seleccion.uEstadio, uEscudo: this.state.Seleccion.uEscudo}})}/>
                 <FormValidationMessage>{this.state.Valid.sEstadio ? null : 'Campo vacio'}</FormValidationMessage>
               </View>
             </View>
             <View style={{flex: .3,flexDirection: 'row'}} marginTop={20}>
               <View style={{flex: 1}}>
                 <FormLabel>Url Estadio:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.uEstadio} onChangeText={(uEstadio) => this.ChangeState(this.state.isLoading, this.state.Backup, this.state.Backup, this.state.Añadir, {sNombre: this.state.Seleccion.sNombre, sEstadio: this.state.Seleccion.sEstadio, Id: this.state.Seleccion.Id, uEstadio: uEstadio, uEscudo: this.state.Seleccion.uEscudo}, this.state.Valid)}/>
+                <FormInput defaultValue={this.state.Seleccion.uEstadio} onChangeText={(uEstadio) => this.setState({Seleccion : {sNombre: this.state.Seleccion.sNombre, sEstadio: this.state.Seleccion.sEstadio, Id: this.state.Seleccion.Id, uEstadio: uEstadio, uEscudo: this.state.Seleccion.uEscudo}})}/>
                 <FormValidationMessage>{this.state.Valid.uEstadio ? null :'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
               <View style={{flex: 1}}>
                 <FormLabel>Url Escudo:</FormLabel>
-                <FormInput defaultValue={this.state.Seleccion.uEscudo} onChangeText={(uEscudo) => this.ChangeState(this.state.isLoading, this.state.Backup, this.state.Backup, this.state.Añadir, {sNombre: this.state.Seleccion.sNombre, sEstadio: this.state.Seleccion.sEstadio, Id: this.state.Seleccion.Id, uEstadio: this.state.Seleccion.uEstadio, uEscudo: uEscudo}, this.state.Valid)}/>
+                <FormInput defaultValue={this.state.Seleccion.uEscudo} onChangeText={(uEscudo) => this.setState({Seleccion: {sNombre: this.state.Seleccion.sNombre, sEstadio: this.state.Seleccion.sEstadio, Id: this.state.Seleccion.Id, uEstadio: this.state.Seleccion.uEstadio, uEscudo: uEscudo}})}/>
                 <FormValidationMessage>{this.state.Valid.uEquipo ? null :'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
             </View>
