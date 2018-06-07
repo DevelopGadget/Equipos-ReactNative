@@ -40,7 +40,7 @@ export default class EquiposView extends React.Component {
     this.refs.Modal.open();
   }
   ValidEquipo(Equipo){
-    var Nombre = true, Estadio = true, UrlE = true, UrlEs = true;
+    var Nombre = true, Estadio = true, UrlE = this.Validimage(Equipo.uEquipo), UrlEs = this.Validimage(Equipo.uEstadio);
     if(Equipo.sNombre == null || Equipo.sNombre.length <= 0){
       Nombre = false;
     }
@@ -49,7 +49,11 @@ export default class EquiposView extends React.Component {
     }
     this.setState({Valid : {sNombre: Nombre, sEstadio: Estadio, uEquipo: UrlE, uEstadio: UrlEs}});
   }
-
+  Validimage(Url){
+    var Load = false;
+    <Image source={{ uri: Url }} onError={() => Load = false}/>
+    return Load;
+  }
   render() {
     const Titulo = this.state.Añadir ? ('Registrar') : (this.state.Seleccion.sNombre);
     const button = this.state.Añadir ? (
