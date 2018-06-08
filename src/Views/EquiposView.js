@@ -15,7 +15,7 @@ export default class EquiposView extends React.Component {
       'Warning: componentWillReceiveProps is deprecated',
     ]);
     this.state ={ isLoading: false, Equipos: [], Backup: [], Añadir: false, Seleccion: {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, 
-    Valid:{sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true}}
+    Valid:{sNombre: true, sEstadio: true, uEscudo: true, uEstadio: true}}
   }
   componentDidMount(){
     EquiposCont.Get().then((res) =>{
@@ -32,27 +32,37 @@ export default class EquiposView extends React.Component {
     ) 
   }
   Añadir(){
-    this.setState({Añadir : true, Seleccion : {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, Valid: {sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true}});
+    this.setState({Añadir : true, Seleccion : {sNombre: '', sEstadio: '', Id: '', uEstadio: '', uEscudo: ''}, Valid: {sNombre: true, sEstadio: true, uEscudo: true, uEstadio: true}});
     this.refs.Modal.open();
   }
   ButtonCard(Equipo){
-    this.setState({Añadir : false, Seleccion : Equipo, Valid:{sNombre: true, sEstadio: true, uEquipo: true, uEstadio: true}});
+    this.setState({Añadir : false, Seleccion : Equipo, Valid:{sNombre: true, sEstadio: true, uEscudo: true, uEstadio: true}});
     this.refs.Modal.open();
   }
   ValidEquipo(Equipo){
-    var Nombre = true, Estadio = true, UrlE = this.Validimage(Equipo.uEquipo), UrlEs = this.Validimage(Equipo.uEstadio);
+    var Nombre = true, Estadio = true, UEsc = true, UEsta = true;
     if(Equipo.sNombre == null || Equipo.sNombre.length <= 0){
       Nombre = false;
     }
     if(Equipo.sEstadio == null || Equipo.sEstadio.length <= 0){
       Estadio = false;
     }
-    this.setState({Valid : {sNombre: Nombre, sEstadio: Estadio, uEquipo: UrlE, uEstadio: UrlEs}});
+    if(Equipo.uEscudo == null || Equipo.uEscudo.length <= 0){
+      UEsc = false;
+    }else{
+      this.Validimage(Equipo.uEscudo, true);
+    }
+    if(Equipo.uEstadio == null || Equipo.uEstadio.length <= 0){
+      UEsta = false;
+    }else{
+      this.Validimage(Equipo.uEstadio, false);
+    }
+    this.setState({Valid : {sNombre: Nombre, sEstadio: Estadio, uEscudo: UEsc ? (this.state.Valid.uEscudo, uEstadio) : (false), uEstadio: UEsta ?  (this.state.Valid.uEstadio) : (false)}});
+    console.log(this.state.Valid.uEstadio);
+    console.log(this.state.Valid.uEscudo);
   }
-  Validimage(Url){
-    var Load = false;
-    <Image source={{ uri: Url }} onError={() => Load = false}/>
-    return Load;
+  Validimage(Url, UrlE){
+    return(<Image source={{ uri: Url }} onError={() => this.setState({Valid : {sNombre: this.state.Valid.sNombre, sEstadio: this.state.Valid.sEstadio, uEscudo: UrlE ? (false) : (this.state.Valid.uEscudo), uEstadio: UrlE ? (this.state.Valid.uEstadio) : (false) }})} onLoad={() => this.setState({Valid : {sNombre: this.state.Valid.sNombre, sEstadio: this.state.Valid.sEstadio, uEscudo: UrlE ? (true) : (this.state.Valid.uEscudo), uEstadio: UrlE ? (this.state.Valid.uEstadio) : (true) }})} style={{width:0, height:0}}/>);
   }
   render() {
     const Titulo = this.state.Añadir ? ('Registrar') : (this.state.Seleccion.sNombre);
@@ -136,7 +146,7 @@ export default class EquiposView extends React.Component {
               <View style={{flex: 1}}>
                 <FormLabel>Url Escudo:</FormLabel>
                 <FormInput defaultValue={this.state.Seleccion.uEscudo} onChangeText={(uEscudo) => this.setState({Seleccion: {sNombre: this.state.Seleccion.sNombre, sEstadio: this.state.Seleccion.sEstadio, Id: this.state.Seleccion.Id, uEstadio: this.state.Seleccion.uEstadio, uEscudo: uEscudo}})}/>
-                <FormValidationMessage>{this.state.Valid.uEquipo ? null :'Tiene que ser Url de imagen'}</FormValidationMessage>
+                <FormValidationMessage>{this.state.Valid.uEscudo ? null :'Tiene que ser Url de imagen'}</FormValidationMessage>
               </View>
             </View>
             {button}
